@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="StatisticsDao">
+  
+  	<insert id="insertStatisticsBySeconds" parameterType="Statistics">
+  		MERGE	INTO STATISTICS_SECONDS T
+  		USING	(
+  			SELECT	#{hour} AS STCS_HOUR
+  					, #{minute} AS STCS_MINUTE
+  					, #{second} AS STCS_SECOND
+  					, #{ip} AS IP
+  					, #{url} AS URL
+  					, ${reqCount} AS REQ_COUNT 
+  			FROM	DUAL
+  		)
+  		ON  (
+  				T.STCS_HOUR = #{hour}
+  		  AND	T.STCS_MINUTE = #{minute}
+  		  AND	T.STCS_SECOND = #{second}
+  		  AND	T.IP = #{ip}
+  		  AND	T.URL = #{url}
+  		)
+  		WHEN MATCHED THEN
+  			UPDATE  SET
+  			VISIT_COUNT = VISIT_COUNT + ${reqCount}
+  		WHEN NOT MATCHED THEN
+  			INSERT (
+						STCS_SECOND
+						, URL
+						, IP
+						, VISIT_COUNT
+						, STCS_YEAR
+						, STCS_MONTH
+						, STCS_DATE
+						, STCS_HOUR
+						, STCS_MINUTE
+						, STCS_ID
+			) VALUES (
+						#{second}
+						, #{url}
+						, #{ip}
+						, #{reqCount}
+						, '0000'
+						, '00'
+						, '00'
+						, #{hour}
+						, #{minute}
+						, NEXTVALUE('ST', SECOND_ID_SEQ.NEXTVAL)
+			)
+  	</insert>
+  	
+  	<insert id="insertStatisticsByMinutes" parameterType="Statistics">
+  		MERGE	INTO STATISTICS_MINUTES T
+  		USING	(
+  			SELECT	#{hour} AS STCS_HOUR
+  					, #{minute} AS STCS_MINUTE
+  					, #{second} AS STCS_SECOND
+  					, #{ip} AS IP
+  					, #{url} AS URL
+  					, ${reqCount} AS REQ_COUNT 
+  			FROM	DUAL
+  		)
+  		ON  (
+  				T.STCS_HOUR = #{hour}
+  		  AND	T.STCS_MINUTE = #{minute}
+  		  AND	T.IP = #{ip}
+  		  AND	T.URL = #{url}
+  		)
+  		WHEN MATCHED THEN
+  			UPDATE  SET
+  			VISIT_COUNT = VISIT_COUNT + ${reqCount}
+  		WHEN NOT MATCHED THEN
+  			INSERT (
+						STCS_SECOND
+						, URL
+						, IP
+						, VISIT_COUNT
+						, STCS_YEAR
+						, STCS_MONTH
+						, STCS_DATE
+						, STCS_HOUR
+						, STCS_MINUTE
+						, STCS_ID
+			) VALUES (
+						#{second}
+						, #{url}
+						, #{ip}
+						, #{reqCount}
+						, '0000'
+						, '00'
+						, '00'
+						, #{hour}
+						, #{minute}
+						, NEXTVALUE('ST', MINUTE_ID_SEQ.NEXTVAL)
+			)
+  	</insert>
+  	
+  	<insert id="insertStatisticsByHours" parameterType="Statistics">
+  		MERGE	INTO STATISTICS_HOURS T
+  		USING	(
+  			SELECT	#{hour} AS STCS_HOUR
+  					, #{minute} AS STCS_MINUTE
+  					, #{second} AS STCS_SECOND
+  					, #{ip} AS IP
+  					, #{url} AS URL
+  					, ${reqCount} AS REQ_COUNT 
+  			FROM	DUAL
+  		)
+  		ON  (
+  				T.STCS_HOUR = #{hour}
+  		  AND	T.IP = #{ip}
+  		  AND	T.URL = #{url}
+  		)
+  		WHEN MATCHED THEN
+  			UPDATE  SET
+  			VISIT_COUNT = VISIT_COUNT + ${reqCount}
+  		WHEN NOT MATCHED THEN
+  			INSERT (
+						STCS_SECOND
+						, URL
+						, IP
+						, VISIT_COUNT
+						, STCS_YEAR
+						, STCS_MONTH
+						, STCS_DATE
+						, STCS_HOUR
+						, STCS_MINUTE
+						, STCS_ID
+			) VALUES (
+						#{second}
+						, #{url}
+						, #{ip}
+						, #{reqCount}
+						, '0000'
+						, '00'
+						, '00'
+						, #{hour}
+						, #{minute}
+						, NEXTVALUE('ST', HOUR_ID_SEQ.NEXTVAL)
+			)
+  	</insert>
+  </mapper>

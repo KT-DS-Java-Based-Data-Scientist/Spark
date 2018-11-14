@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VisitStatisticsDao">
+
+   <insert    id="insertStatisticsByYears"  parameterType="Visit">
+      MERGE INTO URL_VISIT_STATISTICS_YEAR T
+      USING (
+         SELECT   #{year} AS STCS_YEAR
+               , #{month} AS STCS_MONTH
+               , #{date} AS STCS_DATE
+               , #{hour} AS STCS_HOUR
+               , #{minute} AS STCS_MINUTE
+               , #{second} AS STCS_SECOND
+               , #{ip} AS IP
+               , #{url} AS URL
+               , #{mthd} AS MTHD
+         FROM   DUAL
+      )
+      ON   (
+               T.STCS_YEAR = #{year}
+         AND      T.MTHD = #{mthd}
+         AND      T.IP = #{ip}
+         AND      T.URL = #{url}
+      )
+      WHEN MATCHED THEN
+         UPDATE   SET
+         VISIT_COUNT = VISIT_COUNT + 1
+      WHEN NOT MATCHED THEN
+         INSERT (
+            STCS_SECOND
+            , URL
+            , IP
+            , VISIT_COUNT
+            , STCS_YEAR
+            , STCS_MONTH
+            , STCS_DATE
+            , STCS_HOUR
+            , STCS_MINUTE
+            , STCS_ID
+            , MTHD
+         )
+         VALUES   (
+            #{second}
+            , #{url}
+            , #{ip}
+            , 1
+            , #{year}
+            , #{month}
+            , #{date}
+            , #{hour}
+            , #{minute}
+            , NEXTVALUE('ST', URL_VISIT_STATISTICS_YEAR_ID.NEXTVAL)
+            , #{mthd}
+         )
+   </insert>
+   
+   <insert    id="insertStatisticsByMonths"   parameterType="Visit">
+      MERGE INTO URL_VISIT_STATISTICS_MONTH T
+      USING (
+         SELECT   #{year} AS STCS_YEAR
+               , #{month} AS STCS_MONTH
+               , #{date} AS STCS_DATE
+               , #{hour} AS STCS_HOUR
+               , #{minute} AS STCS_MINUTE
+               , #{second} AS STCS_SECOND
+               , #{ip} AS IP
+               , #{url} AS URL
+               , #{mthd} AS MTHD
+         FROM   DUAL
+      )
+      ON   (
+               T.STCS_YEAR = #{year}
+         AND      T.STCS_MONTH =#{month}
+         AND      T.MTHD = #{mthd}
+         AND       T.IP = #{ip}
+         AND       T.URL = #{url}
+      )
+      WHEN MATCHED THEN
+         UPDATE   SET
+         VISIT_COUNT = VISIT_COUNT + 1
+      WHEN NOT MATCHED THEN
+         INSERT (
+            STCS_SECOND
+            , URL
+            , IP
+            , VISIT_COUNT
+            , STCS_YEAR
+            , STCS_MONTH
+            , STCS_DATE
+            , STCS_HOUR
+            , STCS_MINUTE
+            , STCS_ID
+            , MTHD
+         )
+         VALUES   (
+            #{second}
+            , #{url}
+            , #{ip}
+            , 1
+            , #{year}
+            , #{month}
+            , #{date}
+            , #{hour}
+            , #{minute}
+            , NEXTVALUE('ST', URL_VISIT_STATISTICS_MONTH_ID.NEXTVAL)
+            , #{mthd}
+         )
+   </insert>
+   
+   <insert    id="insertStatisticsByDates"  parameterType="Visit">
+      MERGE INTO URL_VISIT_STATISTICS_DATE T
+      USING (
+         SELECT   #{year} AS STCS_YEAR
+               , #{month} AS STCS_MONTH
+               , #{date} AS STCS_DATE
+               , #{hour} AS STCS_HOUR
+               , #{minute} AS STCS_MINUTE
+               , #{second} AS STCS_SECOND
+               , #{ip} AS IP
+               , #{url} AS URL
+               , #{mthd} AS MTHD
+         FROM   DUAL
+      )
+      ON   (
+               T.STCS_YEAR = #{year}
+         AND      T.STCS_MONTH =#{month}
+         AND      T.STCS_DATE =#{date}
+         AND      T.MTHD = #{mthd}
+         AND       T.IP = #{ip}
+         AND       T.URL = #{url}
+      )
+      WHEN MATCHED THEN
+         UPDATE   SET
+         VISIT_COUNT = VISIT_COUNT + 1
+      WHEN NOT MATCHED THEN
+         INSERT (
+            STCS_SECOND
+            , URL
+            , IP
+            , VISIT_COUNT
+            , STCS_YEAR
+            , STCS_MONTH
+            , STCS_DATE
+            , STCS_HOUR
+            , STCS_MINUTE
+            , STCS_ID
+            , MTHD
+         )
+         VALUES   (
+            #{second}
+            , #{url}
+            , #{ip}
+            , 1
+            , #{year}
+            , #{month}
+            , #{date}
+            , #{hour}
+            , #{minute}
+            , NEXTVALUE('ST', URL_VISIT_STATISTICS_DATE_ID.NEXTVAL)
+            , #{mthd}
+         )
+   </insert>
+
+   <insert    id="insertStatisticsBySeconds"  parameterType="Visit">
+      MERGE INTO URL_VISIT_STATISTICS_SECOND T
+      USING (
+         SELECT   #{year} AS STCS_YEAR
+               , #{month} AS STCS_MONTH
+               , #{date} AS STCS_DATE
+               , #{hour} AS STCS_HOUR
+               , #{minute} AS STCS_MINUTE
+               , #{second} AS STCS_SECOND
+               , #{ip} AS IP
+               , #{url} AS URL
+               , #{mthd} AS MTHD
+         FROM   DUAL
+      )
+      ON   (
+               T.STCS_YEAR = #{year}
+         AND      T.STCS_MONTH =#{month}
+         AND      T.STCS_DATE =#{date}
+         AND      T.STCS_HOUR = #{hour}
+         AND       T.STCS_MINUTE = #{minute}
+         AND       T.STCS_SECOND = #{second}
+         AND      T.MTHD = #{mthd}
+         AND       T.IP = #{ip}
+         AND       T.URL = #{url}
+      )
+      WHEN MATCHED THEN
+         UPDATE   SET
+         VISIT_COUNT = VISIT_COUNT + 1
+      WHEN NOT MATCHED THEN
+         INSERT (
+            STCS_SECOND
+            , URL
+            , IP
+            , VISIT_COUNT
+            , STCS_YEAR
+            , STCS_MONTH
+            , STCS_DATE
+            , STCS_HOUR
+            , STCS_MINUTE
+            , STCS_ID
+            , MTHD
+         )
+         VALUES   (
+            #{second}
+            , #{url}
+            , #{ip}
+            , 1
+            , #{year}
+            , #{month}
+            , #{date}
+            , #{hour}
+            , #{minute}
+            , NEXTVALUE('ST', URL_VISIT_STATISTICS_SECOND_ID.NEXTVAL)
+            , #{mthd}
+         )
+   </insert>
+
+   <insert    id="insertStatisticsByMinutes"  parameterType="Visit">
+      MERGE INTO URL_VISIT_STATISTICS_MINUTE T
+      USING (
+         SELECT   #{year} AS STCS_YEAR
+               , #{month} AS STCS_MONTH
+               , #{date} AS STCS_DATE
+               , #{hour} AS STCS_HOUR
+               , #{minute} AS STCS_MINUTE
+               , #{second} AS STCS_SECOND
+               , #{ip} AS IP
+               , #{url} AS URL
+               , #{mthd} AS MTHD
+         FROM   DUAL
+      )
+      ON   (
+               T.STCS_YEAR = #{year}
+         AND      T.STCS_MONTH =#{month}
+         AND      T.STCS_DATE =#{date}
+         AND      T.STCS_HOUR = #{hour}
+         AND       T.STCS_MINUTE = #{minute}
+         AND      T.MTHD = #{mthd}
+         AND       T.IP = #{ip}
+         AND       T.URL = #{url}
+      )
+      WHEN MATCHED THEN
+         UPDATE   SET
+         VISIT_COUNT = VISIT_COUNT + 1
+      WHEN NOT MATCHED THEN
+         INSERT (
+            STCS_SECOND
+            , URL
+            , IP
+            , VISIT_COUNT
+            , STCS_YEAR
+            , STCS_MONTH
+            , STCS_DATE
+            , STCS_HOUR
+            , STCS_MINUTE
+            , STCS_ID
+            , MTHD
+         )
+         VALUES   (
+            #{second}
+            , #{url}
+            , #{ip}
+            , 1
+            , #{year}
+            , #{month}
+            , #{date}
+            , #{hour}
+            , #{minute}
+            , NEXTVALUE('ST', URL_VISIT_STATISTICS_MINUTE_ID.NEXTVAL)
+            , #{mthd}
+         )
+   </insert>
+
+   <insert    id="insertStatisticsByHours" parameterType="Visit">
+      MERGE INTO URL_VISIT_STATISTICS_HOUR T
+      USING (
+         SELECT   #{year} AS STCS_YEAR
+               , #{month} AS STCS_MONTH
+               , #{date} AS STCS_DATE
+               , #{hour} AS STCS_HOUR
+               , #{minute} AS STCS_MINUTE
+               , #{second} AS STCS_SECOND
+               , #{ip} AS IP
+               , #{url} AS URL
+               , #{mthd} AS MTHD
+         FROM   DUAL
+      )
+      ON   (
+               T.STCS_YEAR = #{year}
+         AND      T.STCS_MONTH =#{month}
+         AND      T.STCS_DATE =#{date}
+         AND      T.STCS_HOUR = #{hour}
+         AND      T.MTHD = #{mthd}
+         AND       T.IP = #{ip}
+         AND       T.URL = #{url}
+      )
+      WHEN MATCHED THEN
+         UPDATE   SET
+         VISIT_COUNT = VISIT_COUNT + 1
+      WHEN NOT MATCHED THEN
+         INSERT (
+            STCS_SECOND
+            , URL
+            , IP
+            , VISIT_COUNT
+            , STCS_YEAR
+            , STCS_MONTH
+            , STCS_DATE
+            , STCS_HOUR
+            , STCS_MINUTE
+            , STCS_ID
+            , MTHD
+         )
+         VALUES   (
+            #{second}
+            , #{url}
+            , #{ip}
+            , 1
+            , #{year}
+            , #{month}
+            , #{date}
+            , #{hour}
+            , #{minute}
+            , NEXTVALUE('ST', URL_VISIT_STATISTICS_HOUR_ID.NEXTVAL)
+            , #{mthd}
+         )
+   </insert>
+</mapper>   
